@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XenoSkill — Make AI Remember What It Builds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        :root {
+            --bg-dark: #0f172a;
+            --accent-primary: #38bdf8;
+            --accent-secondary: #818cf8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #e2e8f0;
+            scroll-behavior: smooth;
+        }
+
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .terminal-window {
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal-header {
+            background: #334155;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            border-color: var(--accent-primary);
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="selection:bg-sky-500/30">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel py-4">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-sky-500 p-1.5 rounded-lg">
+                    <i class="fas fa-microchip text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white">XenoSkill</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+                <a href="#how-it-works" class="hover:text-sky-400 transition">How it Works</a>
+                <a href="#structure" class="hover:text-sky-400 transition">Structure</a>
+                <a href="#install" class="hover:text-sky-400 transition">Install</a>
+            </div>
+            <a href="https://github.com/saurabhgayali/Xenoskill" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-full text-sm font-semibold transition flex items-center gap-2">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="inline-block px-4 py-1.5 mb-6 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-bold uppercase tracking-widest">
+                Phase-Gated AI SDLC Layer
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-8 leading-tight">
+                Make AI <span class="gradient-text">Remember</span> <br>What It Builds.
+            </h1>
+            <p class="text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                XenoSkill externalizes memory beyond LLM context limits, transforming stateless AI into a structured execution engine for long-horizon software development.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#install" class="bg-sky-500 hover:bg-sky-400 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg transition shadow-lg shadow-sky-500/20">
+                    Get Started Now
+                </a>
+                <a href="#how-it-works" class="bg-slate-800 hover:bg-slate-700 text-white px-8 py-4 rounded-xl font-bold text-lg border border-slate-700 transition">
+                    View Methodology
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Terminal Install Section -->
+    <section id="install" class="py-20 bg-slate-900/50">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-12">One-Line Setup</h2>
+            
+            <div class="space-y-8">
+                <!-- Windows -->
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                        <span class="ml-2 text-xs text-slate-400 font-mono flex items-center gap-2">
+                            <i class="fab fa-windows"></i> PowerShell
+                        </span>
+                    </div>
+                    <div class="p-6 overflow-x-auto relative group">
+                        <code class="text-sky-400 code-font text-sm whitespace-nowrap">
+                            irm https://raw.githubusercontent.com/saurabhgayali/XenoSkill/refs/heads/master/init.ps1 | iex
+                        </code>
+                        <button onclick="copyToClipboard('irm https://raw.githubusercontent.com/saurabhgayali/XenoSkill/refs/heads/master/init.ps1 | iex', this)" class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition p-2 text-slate-400 hover:text-white bg-slate-800 rounded">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Linux -->
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                        <span class="ml-2 text-xs text-slate-400 font-mono flex items-center gap-2">
+                            <i class="fab fa-linux"></i> Linux / macOS
+                        </span>
+                    </div>
+                    <div class="p-6 overflow-x-auto relative group">
+                        <code class="text-sky-400 code-font text-sm whitespace-nowrap">
+                            curl -sSL https://raw.githubusercontent.com/saurabhgayali/XenoSkill/refs/heads/master/init.sh | bash
+                        </code>
+                        <button onclick="copyToClipboard('curl -sSL https://raw.githubusercontent.com/saurabhgayali/XenoSkill/refs/heads/master/init.sh| bash', this)" class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition p-2 text-slate-400 hover:text-white bg-slate-800 rounded">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Philosophy -->
+    <section id="how-it-works" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Core Principles</h2>
+                <p class="text-slate-400">LLMs forget. Software projects don't. We bridge that gap.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-panel p-8 rounded-2xl feature-card border border-slate-800">
+                    <div class="w-12 h-12 bg-sky-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-database text-sky-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">External Memory</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">All state is stored in versioned files, keeping the AI's context window focused on logic rather than history.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl feature-card border border-slate-800">
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-layer-group text-indigo-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Phase-Gated</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Work progresses in controlled steps. No phase starts until the previous one is verified and status-logged.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl feature-card border border-slate-800">
+                    <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-compass text-emerald-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Drift Control</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">New ideas are captured in `suggest.md` without polluting the current execution thread or roadmap.</p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl feature-card border border-slate-800">
+                    <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-infinity text-amber-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Session Independent</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Resume projects weeks later. The AI reads the workspace and understands exactly where it left off.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Structure -->
+    <section id="structure" class="py-24 bg-slate-900/30 px-6">
+        <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+            <div class="lg:w-1/2">
+                <h2 class="text-4xl font-bold mb-6">Structured Workspace</h2>
+                <p class="text-slate-400 mb-8">XenoSkill creates a standardized environment that forces the AI to follow your SDLC, preventing "AI mess" in large codebases.</p>
+                
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1.5"><i class="fas fa-check-circle text-sky-400"></i></div>
+                        <div>
+                            <span class="font-bold text-white">info/</span>
+                            <p class="text-slate-400 text-sm">Houses theory, architecture, and the roadmap.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1.5"><i class="fas fa-check-circle text-sky-400"></i></div>
+                        <div>
+                            <span class="font-bold text-white">status/</span>
+                            <p class="text-slate-400 text-sm">Execution tracking and phase-specific logs.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1.5"><i class="fas fa-check-circle text-sky-400"></i></div>
+                        <div>
+                            <span class="font-bold text-white">.ai/</span>
+                            <p class="text-slate-400 text-sm">Global behavior rules and AI personas.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="lg:w-1/2 w-full">
+                <div class="terminal-window p-8 code-font text-sm leading-relaxed">
+                    <div class="text-slate-500 mb-2"># Project structure</div>
+                    <div class="text-white">project/</div>
+                    <div class="ml-4 flex items-center gap-2">├── <span class="text-sky-400">info/</span> <span class="text-slate-600 italic"># planning</span></div>
+                    <div class="ml-8 flex items-center gap-2">├── INIT_PROMPT.md</div>
+                    <div class="ml-8 flex items-center gap-2">└── roadmap.md</div>
+                    <div class="ml-4 flex items-center gap-2">├── <span class="text-indigo-400">status/</span> <span class="text-slate-600 italic"># logs</span></div>
+                    <div class="ml-8 flex items-center gap-2">├── status.md</div>
+                    <div class="ml-8 flex items-center gap-2">└── phase_1.md</div>
+                    <div class="ml-4 flex items-center gap-2">├── <span class="text-emerald-400">.ai/</span> <span class="text-slate-600 italic"># config</span></div>
+                    <div class="ml-8 flex items-center gap-2">└── AI_RULES.md</div>
+                    <div class="ml-4 flex items-center gap-2">├── <span class="text-amber-400">src/</span> <span class="text-slate-600 italic"># application</span></div>
+                    <div class="ml-4 flex items-center gap-2">└── xenoskill-finalize.sh</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finalizing -->
+    <section class="py-24 px-6 text-center">
+        <div class="max-w-3xl mx-auto glass-panel p-12 rounded-3xl border-2 border-sky-500/10">
+            <h2 class="text-3xl font-bold mb-4 italic">"Not an Agent"</h2>
+            <p class="text-slate-400 mb-10 leading-relaxed">
+                XenoSkill doesn't automate development. It defines a system that <span class="text-white font-semibold">GitHub Copilot, Claude, or ChatGPT</span> follow. Once done, the finalize script scrubs the "AI scaffolding," leaving only clean code and docs.
+            </p>
+            <div class="flex justify-center gap-8 items-center grayscale opacity-60">
+                <i class="fab fa-github text-4xl"></i>
+                <span class="text-2xl font-bold">Claude</span>
+                <span class="text-2xl font-bold">ChatGPT</span>
+                <i class="fas fa-code text-3xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Footer -->
+    <footer class="py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+            <div>
+                <div class="flex items-center gap-2 mb-2 justify-center md:justify-start">
+                    <div class="bg-sky-500 p-1 rounded">
+                        <i class="fas fa-microchip text-white text-xs"></i>
+                    </div>
+                    <span class="font-bold text-white">XenoSkill</span>
+                </div>
+                <p class="text-slate-500 text-sm">A bridge between stateless AI and complex engineering.</p>
+                <p class="text-slate-600 text-xs mt-2">Released under the Apache License 2.0</p>
+            </div>
+            <div class="text-slate-500 text-sm flex flex-wrap justify-center gap-6">
+                <a href="https://github.com/saurabhgayali/Xenoskill" class="hover:text-white transition">Documentation</a>
+                <a href="https://github.com/saurabhgayali/Xenoskill" class="hover:text-white transition">GitHub</a>
+                <span class="hidden md:inline">|</span>
+                <span>© 2026 Saurabh Gayali</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Toast (Hidden) -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-sky-500 text-slate-900 px-6 py-3 rounded-full font-bold shadow-2xl opacity-0 pointer-events-none transition-all duration-300">
+        Copied to clipboard!
+    </div>
+
+    <script>
+        function copyToClipboard(text, btn) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, -10px)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 0)';
+            }, 2000);
+        }
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('scroll-reveal');
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
