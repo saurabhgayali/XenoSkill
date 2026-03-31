@@ -1,45 +1,74 @@
-#!/usr/bin/env bash
+Clear-Host
 
-set -e
+$repoBase = "https://raw.githubusercontent.com/saurabhgayali/XenoSkill/master"
 
-clear
+Write-Host "[1/3] Fetching XenoSkill templates..." -ForegroundColor Cyan
+Write-Host ""
 
-# Resolve paths
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TEMPLATE_DIR="$SCRIPT_DIR/core/templates"
-ASCII_FILE="$SCRIPT_DIR/XenoSkill.txt"
+# Create folders
+$folders = @("info","status",".ai","exclude","builder")
+foreach ($f in $folders) {
+    if (!(Test-Path $f)) {
+        New-Item -ItemType Directory -Path $f | Out-Null
+    }
+}
 
-echo "[1/3] Copying XenoSkill templates..."
-echo ""
+# Download required files
 
-# Copy everything including hidden (.ai, .gitignore)
-cp -r "$TEMPLATE_DIR/"* "$TEMPLATE_DIR/".* . 2>/dev/null || true
+function Get-File($url, $outPath) {
+    try {
+        Invoke-WebRequest $url -OutFile $outPath -UseBasicParsing
+    } catch {
+        Write-Host "Failed to fetch $url" -ForegroundColor Red
+    }
+}
 
-echo "[2/3] Setting up workspace..."
-echo ""
+# INFO FILES
+Get-File "$repoBase/core/templates/info/theory.md" "info/theory.md"
 
-# Ensure base folders exist (safe)
-mkdir -p info status .ai exclude builder
 
-echo "[3/3] Finalizing..."
-echo ""
+# STATUS FILES
+Get-File "$repoBase/core/templates/status/status.md" "status/status.md"
+Get-File "$repoBase/core/templates/status/suggest.md" "status/suggest.md"
 
-# Show ASCII
-if [ -f "$ASCII_FILE" ]; then
-    cat "$ASCII_FILE"
-else
-    echo "[XenoSkill]"
-fi
+# AI RULES
+New-Item -ItemType Directory -Path ".ai" -Force | Out-Null
+Get-File "$repoBase/core/templates/.ai/AI_RULES.md" ".ai/AI_RULES.md"
+Get-File "$repoBase/core/templates/.ai/INIT_PROMPT.md" "info/INIT_PROMPT.md"
 
-echo ""
-echo "====================================="
-echo " ✔ XenoSkill Initialized"
-echo "====================================="
-echo ""
-echo "XenoSkill — A phase-gated SDLC layer for AI"
-echo ""
-echo "Next steps:"
-echo "1. Open info/INIT_PROMPT.md"
-echo "2. Paste into your AI"
-echo "3. Let XenoSkill drive execution"
-echo ""
+# FINALIZE SCRIPTS
+Get-File "$repoBase/core/templates/xenoskill-finalize.ps1" "xenoskill-finalize.ps1"
+
+Write-Host "[2/3] Setting up workspace..." -ForegroundColor Yellow
+Write-Host ""
+
+# Optional files
+Get-File "$repoBase/core/templates/.gitignore" ".gitignore"
+
+Write-Host "[3/3] Finalizing..." -ForegroundColor Green
+Write-Host ""
+
+# ASCII
+try {
+    (Invoke-WebRequest "$repoBase/XenoSkill.txt" -UseBasicParsing).Content | ForEach-Object { Write-Host $_ }
+} catch {
+    Write-Host "[XenoSkill]" -ForegroundColor Cyan
+}
+
+Write-Host ""
+Write-Host "=====================================" -ForegroundColor Green
+Write-Host "✔ XenoSkill Initialized" -ForegroundColor Green
+Write-Host "=====================================" -ForegroundColor Green
+Write-Host ""
+
+Write-Host "XenoSkill — A phase-gated SDLC layer for AI" -ForegroundColor Cyan
+Write-Host ""
+
+Write-Host "Next steps:" -ForegroundColor Yellow
+Write-Host "1. Open .ai/INIT_PROMPT.md"
+Write-Host "2. Paste into your AI"
+Write-Host "3. Let XenoSkill drive execution"
+Write-Host ""
+Write-Host "When done:" -ForegroundColor Yellow
+Write-Host "Run xenoskill-finalize.ps1"
+Write-Host ""
