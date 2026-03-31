@@ -34,7 +34,7 @@ Get-File "$repoBase/core/templates/status/suggest.md" "status/suggest.md"
 # AI RULES
 New-Item -ItemType Directory -Path ".ai" -Force | Out-Null
 Get-File "$repoBase/core/templates/.ai/AI_RULES.md" ".ai/AI_RULES.md"
-Get-File "$repoBase/core/templates/.ai/INIT_PROMPT.md" "info/INIT_PROMPT.md"
+Get-File "$repoBase/core/templates/.ai/INIT_PROMPT.md" ".ai/INIT_PROMPT.md"
 
 # FINALIZE SCRIPTS
 Get-File "$repoBase/core/templates/xenoskill-finalize.ps1" "xenoskill-finalize.ps1"
